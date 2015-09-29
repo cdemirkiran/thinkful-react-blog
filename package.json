@@ -37,6 +37,8 @@
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
-    "react": "^0.13.0"
+    "react": "^0.13.0",
+    "reflux": "^0.2.12",
+    "superagent": "^1.4.0"
   }
 }
