@@ -1,98 +1,158 @@
-var webpack = require('webpack');
-var express = require('express');
-var config = require('./webpack.config');
-var levelup = require('levelup');
-var sublevel = require('level-sublevel');
-var app = express();
+var webpack = require('webpack'),
+    mongoose = require('mongoose'),
+    express = require('express'),
+    config = require('./webpack.config'),
+    bodyParser = require('body-parser');
+
+    mongoose.connect('mongodb://thinkful:thinkful@ds037814.mongolab.com:37814/jhumphrey');
+
+var postSchema = mongoose.Schema({
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    content: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    author: {
+        type: String,
+        required: true,
+        trim: true
+    }
+});
+
+var Post = mongoose.model('Post', postSchema),
+    app = express();
 
 app.use(express.static(__dirname));
-//app.set('views', __dirname + '/');
+app.set('port', process.env.PORT || 3000);
+app.use(bodyParser.json());
 app.set('view engine', 'html');
 
-// Database Initialization
-var db = sublevel(levelup('./db', {
-  db: require('leveldown'),
-  valueEncoding: 'json'
-}));
-
-function getUsers() {
-  cb();
-}
-
-var usersdb = db.sublevel('users');
-var postsdb = db.sublevel('posts');
-
 // Static Routes
-app.get('/', function (req, res) {
-  res.render('index', function(err, html) {
-    res.send(html);
-  });
-});
-
-
-// API routes
-app.get('/api/users', function(req, res) {
-  usersdb.get('users', function(err, data) {
-    console.log(data);
-  });
-});
-
-app.post('/api/users', function(req, res) {
-  usersdb.get('users', function(err, users) {
-
-    var updatedUsers = users.filter(function(user) {
-      return user.name !== req.body.user.name;
+app.get('/', function(req, res) {
+    res.sendFile('index.html', {
+        root: __dirname
     });
+});
 
-    if (updatedUsers.length === users.length) {
-      updatedUsers.push(req.body.user);
-    } else {
-      // err
+
+// View
+app.get('/', function(req, res) {
+    res.sendFile('public/index.html', {
+        root: __dirname
+    });
+});
+// Create
+app.post('/posts', function(req, res) {
+    if (!req.body || !req.body.content) {
+        return res.sendStatus(400);
     }
 
-    usersdb.put('users', updatedUsers, function(err) {
-      if (err) { return console.log('error updating users') }
+    var post = new Post({
+        author: req.body.author,
+        content: req.body.content,
+        title: req.body.title
     });
-  });
+
+    post.save()
+        .then(function(post, err) {
+            if (err) {
+                return res.status(500).json({
+                    error: 'Error Has Occured'
+                });
+            }
+            res.status(201)
+                .send(post);
+        })
 });
 
-app.put('/api/users', function(req, res) {
-  usersdb.get('users', function(err, users) {
-    var updatedUsers = users.map(function(user) {
-      return (user.name !== req.body.user.name) ? user : req.body.user.name;
-    });
-    usersdb.put('users', updatedUsers, function(err) {
-      if (err) { return console.log('error updating users') }
-    });
-  })
+// Retrieve
+app.get('/posts', function(req, res) {
+    Post.find()
+        .exec()
+        .then(function(posts, err) {
+            if (err) {
+                return res.status(500).json({
+                    error: 'Error Has Occured'
+                });
+            }
+            res.json(posts);
+        });
 });
 
-app.delete('/api/users', function(req, res) {
-
+//Read
+app.get('/posts/:id', function(req, res) {
+    if (!req.params.id) {
+        return res.sendStatus(400);
+    }
+    Post.findOne({
+            _id: req.params.id
+        })
+        .exec()
+        .then(function(post, err) {
+            if (err) {
+                return res.status(500).json({
+                    error: 'Error Has Occured'
+                });
+            }
+            if (!post) {
+                return res.sendStatus(404);
+            }
+            res.json(post);
+        });
 });
 
-app.get('/api/posts', function(req, res) {
-  postsdb.get('users', function(err, data) {
-    console.log(data);
-  });
+// Update
+app.put('/posts/:id', function(req, res) {
+    if (!req.body || !req.body.content || !req.params.id) {
+        return res.sendStatus(400);
+    }
+    Post.findOneAndUpdate({
+            _id: req.params.id
+        }, {
+            content: req.body.content,
+            title: req.body.title,
+            author: req.body.author
+        })
+        .exec()
+        .then(function(post, err) {
+            if (err) {
+                return res.status(500).json({
+                    error: 'Error Has Occured'
+                });
+            }
+            if (!post) {
+                return res.sendStatus(404);
+            }
+            res.json(post);
+        });
 });
 
-app.post('/api/posts', function(req, res) {
-
+// Delete
+app.delete('/posts/:id', function(req, res) {
+    if (!req.params.id) {
+        return res.sendStatus(400);
+    }
+    Post.findOneAndRemove({
+            _id: req.params.id
+        })
+        .exec()
+        .then(function(post) {
+            if (!post) {
+                return res.sendStatus(404);
+            }
+            res.sendStatus(200);
+        });
 });
 
-app.put('/api/posts', function(req, res) {
-
-});
-
-app.delete('/api/posts', function(req, res) {
-
-});
-
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log(host, port);
-
-  console.log('Example app listening at http://%s:%s', host, port);
+app.listen(app.get('port'), function() {
+    console.log("Express server listening on port " + app.get('port'));
 });
