@@ -1,32 +1,27 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router';
-import LoginContainer from './containers/login';
-import PostsContainer from './containers/posts';
+import React from 'react';
+import Reflux from 'reflux';
+import BlogActions from './actions/blog';
+import BlogStore from './stores/blog';
+import NewPost from './components/new-post';
+import PostsList from './components/posts-list';
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
+export default React.createClass({
+  mixins: [
+    Reflux.connect(BlogStore)
+  ],
 
-    this.state = {
-      loggedIn: true,
-      issue: {}
-    };
-  };
+  componentDidMount() {
+    BlogActions.getPosts();
+  },
 
   render() {
     return (
       <div>
-        <ul>
-          <li>
-            { this.state.loggedIn ? (
-              <p>Log out</p>
-            ) : (
-              <p>Sign in</p>
-            )}
-          </li>
-        </ul>
-        { this.props.children }
+        <PostsList
+          posts={ this.state.posts }
+          editing={ this.state.editing }/>
+        <NewPost/>
       </div>
     );
-  };
-}
+  }
+});
