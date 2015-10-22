@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import BlogActions from '../actions/blog';
-import EditPost from './edit-post';
-import Post from './post';
+import Post from './Post';
 
 export default class PostsList extends Component {
   constructor(props) {
@@ -10,18 +9,10 @@ export default class PostsList extends Component {
   };
 
   /**
-   *
-   * 
-   * @return {array} Array of Post components.
+   * Transform each post from posts prop into a Post component.
    */
   renderPosts() {
-    return this.props.posts.map(post => {
-      if (post._id === this.props.editing) {
-        return ( <EditPost { ...post } onUpdatePost={ BlogActions.updatePost }/> );
-      }
-
-      return ( <Post { ...post } onEditPost={ BlogActions.editPost }/> );
-    });
+    return this.props.posts.map((post, i) => <Post { ...post } key={ i }/>);
   };
 
   render() {

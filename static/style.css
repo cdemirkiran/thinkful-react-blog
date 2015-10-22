@@ -2,13 +2,13 @@ body {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
-.PostsList {
-  display: flex;
-}
-
 .NewPost-content,
 .NewPost-label,
 .NewPost-title,
 .NewPost-submitButton {
   display: block;
+}
+
+.NewPost {
+  border: 1px solid #000;
 }

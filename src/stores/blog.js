@@ -10,20 +10,22 @@ export default Reflux.createStore({
 
   init() {
     // Initialize the object that will hold our data.
-    this.data = {
-      editing: -1
-    };
+    this.data = {};
   },
 
+  /**
+   * When a component connects to this store,
+   * it gets this as its initial state.
+   * @return {object} Data stored in our store.
+   */
   getInitialState() {
     return this.data;
   },
 
   /**
-   * 
+   * Make API call to fetch posts.
    */
   onGetPosts() {
-    console.log('yo');
     request
       .get('/posts')
       .set('Content-Type', 'application/json')
@@ -46,16 +48,5 @@ export default Reflux.createStore({
 
   onGetPostsFailure(err) {
     console.error(`Error: ${err}`);
-  },
-
-  onEditPost(id) {
-    // Set the id of the blog post being edited.
-    this.data.editing = id;
-
-    // Trigger the change to connected components.
-    this.trigger({
-      editing: this.data.editing
-    });
   }
-
 });
