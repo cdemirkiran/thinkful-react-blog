@@ -8,7 +8,7 @@ export default class NewPost extends Component {
   render() {
     const { title, content, updateTitle, updateContent, onSubmit } = this.props;
     return (
-      <div className='NewPost'>
+      <div className='row'>
         <label className='NewPost-label'>Title: </label>
         <input 
           className='NewPost-title'
@@ -23,7 +23,7 @@ export default class NewPost extends Component {
           cols="50" 
           onChange={ updateContent }/>
         <button 
-          className='NewPost-submitButton' 
+          className="btn btn-primary" 
           onClick={ onSubmit }>
           Add Post
         </button>

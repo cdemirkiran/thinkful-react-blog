@@ -8,11 +8,23 @@ export default class Post extends Component {
   render() {
     const { title, author, created, content } = this.props;
     return (
-      <div>
-        <h2>{ title }</h2>
-        <p>{ `by ${author} at ${created}` }</p>
-        <p>{ content }</p>
-      </div>
+        <div>
+          <div className="row">
+              <div className="col-md-7">
+                  <a href="#">
+                      <img className="img-responsive" src="http://placehold.it/700x300" />
+                  </a>
+              </div>
+              <div className="col-md-5">
+                  <h3>{ title }</h3>
+                  <h4>{ `by ${author} at ${created}` }</h4>
+                  <p>{ content }</p>
+                  <a className="btn btn-primary" href="#">View Project <span className="glyphicon glyphicon-chevron-right"></span></a>
+              </div>
+          </div>
+          <hr/>
+        </div>
+
     );
   };
 };
