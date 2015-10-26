@@ -12,3 +12,15 @@ body {
 .NewPost {
   border: 1px solid #000;
 }
+
+.navbar{
+    background:#6799FF;
+}
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+    background-color: transparent;
+}
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #cdddff;
+    background-color: transparent;
+}
