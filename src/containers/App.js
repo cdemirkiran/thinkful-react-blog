@@ -17,9 +17,9 @@ export default React.createClass({
   render() {
     return (
       <div className="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">React JS Blog
+        <div className="row">
+            <div className="col-lg-12">
+                <h1 className="page-header">React JS Blog
                     <small> by Green Pioneer & Harry </small>
                 </h1>
             </div>
@@ -32,10 +32,10 @@ export default React.createClass({
             </div>
         </div>
         <NewPostContainer 
-          title={ this.state.title }
-          content={ this.state.content }
-          updateTitle={ this.updateTitle }
-          updateContent={ this.updateContent }
+          title={ this.state.newPost.title }
+          content={ this.state.newPost.content }
+          updateTitle={ BlogActions.newPostInput.bind(this, 'title') }
+          updateContent={ BlogActions.newPostInput.bind(this, 'content') }
           onSubmit={ BlogActions.addPost } />
       </div>
     );

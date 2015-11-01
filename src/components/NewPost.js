@@ -6,7 +6,7 @@ export default class NewPost extends Component {
   };
 
   render() {
-    const { title, content, updateTitle, updateContent, onSubmit } = this.props;
+    const { title, content } = this.props;
     return (
       <div className='row'>
         <label className='NewPost-label'>Title: </label>
@@ -14,17 +14,17 @@ export default class NewPost extends Component {
           className='NewPost-title'
           type="text" 
           value={ title } 
-          onChange={ updateTitle }/>
+          onChange={ this.props.updateTitle }/>
         <label className='NewPost-label'>Content: </label>
         <textarea 
           className='NewPost-content'
           value={ content }
           rows="10" 
           cols="50" 
-          onChange={ updateContent }/>
+          onChange={ this.props.updateContent }/>
         <button 
           className="btn btn-primary" 
-          onClick={ onSubmit }>
+          onClick={ () => this.props.onSubmit(title, content) }>
           Add Post
         </button>
       </div>
