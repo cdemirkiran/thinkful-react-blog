@@ -63,7 +63,7 @@ export default Reflux.createStore({
     return new Error(err);
   },
 
-  onAddPost(title, content) {
+  onAddPost() {
     request
       .post('/posts')
       .send({
@@ -115,12 +115,16 @@ export default Reflux.createStore({
   },
 
   onDeletePostCompleted(id) {
+    // Remove post from data store
     this.data.posts = this.data.posts.filter(post => (post._id !== id));
     this.trigger({
       posts: this.data.posts
     });
   },
 
+  /**
+   * Updates title and content field of a new post when user inputs.
+   */
   onNewPostInput(target, val) {
     this.data.newPost[target] = val;
     this.trigger({

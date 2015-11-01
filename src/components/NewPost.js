@@ -9,22 +9,23 @@ export default class NewPost extends Component {
     const { title, content } = this.props;
     return (
       <div className='row'>
-        <label className='NewPost-label'>Title: </label>
-        <input 
-          className='NewPost-title'
+        <label
+          style={ { display: 'block' } }>Title: </label>
+        <input
           type="text" 
           value={ title } 
-          onChange={ this.props.updateTitle }/>
-        <label className='NewPost-label'>Content: </label>
-        <textarea 
-          className='NewPost-content'
+          onChange={ (e) => this.props.updateTitle(e.target.value) }/>
+        <label
+          style={ { display: 'block' } }>Content: </label>
+        <textarea
           value={ content }
-          rows="10" 
+          rows="8"
           cols="50" 
-          onChange={ this.props.updateContent }/>
-        <button 
+          onChange={ (e) => this.props.updateContent(e.target.value) }/>
+        <button
           className="btn btn-primary" 
-          onClick={ () => this.props.onSubmit(title, content) }>
+          onClick={ this.props.onSubmit }
+          style={ { display: 'block' } }>
           Add Post
         </button>
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import Reflux from 'reflux';
 import BlogActions from '../actions/blog';
 import BlogStore from '../stores/blog';
-import NewPostContainer from '../containers/NewPost';
+import NewPost from '../components/NewPost';
 import PostsList from '../components/PostsList';
 
 export default React.createClass({
@@ -24,19 +24,19 @@ export default React.createClass({
                 </h1>
             </div>
         </div>
-        <PostsList
-          posts={ this.state.posts }/>
         <div className="row">
             <div className="col-lg-12">
-                <h1 className="page-header">Create A New Post</h1>
+                <h3 className="page-header">Create A New Post</h3>
             </div>
         </div>
-        <NewPostContainer 
+        <NewPost
           title={ this.state.newPost.title }
           content={ this.state.newPost.content }
           updateTitle={ BlogActions.newPostInput.bind(this, 'title') }
           updateContent={ BlogActions.newPostInput.bind(this, 'content') }
           onSubmit={ BlogActions.addPost } />
+        <PostsList
+          posts={ this.state.posts }/>
       </div>
     );
   }
