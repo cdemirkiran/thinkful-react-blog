@@ -6,7 +6,7 @@ export default class Post extends Component {
   };
 
   render() {
-    const { title, author, created, content } = this.props;
+    const { title, author, created, content, _id } = this.props;
     return (
         <div>
           <div className="row">
@@ -19,7 +19,8 @@ export default class Post extends Component {
                   <h3>{ title }</h3>
                   <h4>{ `by ${author} at ${created}` }</h4>
                   <p>{ content }</p>
-                  <a className="btn btn-primary" href="#">View Project <span className="glyphicon glyphicon-chevron-right"></span></a>
+                  <a className="btn btn-primary" href="#"
+                    onClick={ () => this.props.deletePost(_id) }>Delete</a>
               </div>
           </div>
           <hr/>

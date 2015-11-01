@@ -12,7 +12,11 @@ export default class PostsList extends Component {
    * Transform each post from posts prop into a Post component.
    */
   renderPosts() {
-    return this.props.posts.map((post, i) => <Post { ...post } key={ i }/>);
+    return this.props.posts.map((post, i) => 
+      <Post 
+        { ...post }
+        key={ i }
+        deletePost={ BlogActions.deletePost } />);
   };
 
   render() {
